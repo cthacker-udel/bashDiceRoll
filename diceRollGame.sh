@@ -1,4 +1,4 @@
-#!/bin/bash -x
+#!/bin/bash 
 
 echo -e "\n\nWelcome to Thacker's Dice Roll Game!\n"
 
