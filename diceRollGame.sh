@@ -22,7 +22,22 @@ sleep 2
 cputotalscore=0
 playertotalscore=0
 
+display_score(){
+
+cat <<EOF
+
+    $cpu's Score : $cputotalscore
+    $player's Score : $playertotalscore
+
+EOF
+
+
+
+}
+
+
 while true; do
+    display_score
     cpuchoice=$(shuf -i $x-$y -n 1)
     echo -e "\n$cpu rolling dice"
     sleep 2
@@ -45,27 +60,35 @@ while true; do
     sleep 2
     playerchoice=$(shuf -i $x-$y -n 1)
     playerdicetotal=$((playerdicetotal + playerchoice))
-    echo -e "\n $player rolling dice for second time"
+    echo -e "\n$player rolling dice for second time"
     playerchoice=$(shuf -i $x-$y -n 1)
     sleep 2
     if [ "$playerchoice" -eq "$playerdicetotal" ]; then
         echo -e "\n$player rolled same dice, rolling for third time"
         playerdicetotal=$((playerdicetotal + playerchoice))
-        playerchoice=$((shuf -i $x-$y -n 1))
+        playerchoice=$(shuf -i $x-$y -n 1)
         playerdicetotal=$((playerdicetotal + playerchoice))
         sleep 2
     fi
 
     if [ "$cpudicetotal" -gt "$playerdicetotal" ]; then
-        echo -e "\n$cpu scored more than $player, ~=~=DICE SCORE~=~=\n$cpu : $cpudicetotal\n$player : $playerdicetotal\n"
+        echo -e "\n$cpu scored more than $player, \n\n~=~=DICE SCORE~=~=\n$cpu : $cpudicetotal\n$player : $playerdicetotal\n"
         ((cputotalscore++))
         echo -e "\n$cpu scores 1 point"
+        playerdicetotal=0
+        cpudicetotal=0
+        sleep 3
     elif [ "$playerdicetotal" -gt "$cpudicetotal" ]; then
-        echo -e "\n$player scored more than $cpu, ~=~=~=DICE SCORE~=~=~=\N$cpu : $cpudicetotal\n$player : $playerdicetotal"
+        echo -e "\n$player scored more than $cpu, \n\n~=~=~=DICE SCORE~=~=~=\n$cpu : $cpudicetotal\n$player : $playerdicetotal"
         ((playertotalscore++))
+        echo -e "\n$player scores 1 point"
+        sleep 3
+        playerdicetotal=0
+        cpudicetotal=0
     else
         echo -e "$player and $cpu dice total was equal, resetting"
         playerdicetotal=0
         cpudicetotal=0
+        sleep 3
     fi
 done
